@@ -14,24 +14,49 @@ package ru.bspb.files;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
+
 public class Main {
+
+
     public static void main(String[] args) throws IOException {
-            File folder=new File("c:/log/");
-            File[] listOfFiles=folder.listFiles();
-            for (File tempFile : listOfFiles) {
-                System.out.println(tempFile.getName());
-                try (FileReader fr = new FileReader(tempFile);
-                     BufferedReader br = new BufferedReader(fr);)
-                {
-                    String str;
-                    while ((str = br.readLine()) != null) {
-                        System.out.println(str);
-                    }
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+        File folder = new File("c:/log/");
+        File[] listOfFiles = folder.listFiles();
+        for (File tempFile : listOfFiles) {
+            System.out.println(tempFile.getName());
+            try (FileReader fr = new FileReader(tempFile);
+                 BufferedReader br = new BufferedReader(fr);) {
+                String str;
+                while ((str = br.readLine()) != null) {
+                    System.out.println(str);
                 }
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
             }
         }
     }
+}
+
+
+//        String searchWord = "WARN"; // слово заменить на нужное
+//        FileInputStream fis = new FileInputStream(new File("c:/log/application.log")); // путь заменить на нужный
+//        byte[] content = new byte[fis.available()];
+//        fis.read(content);
+//        fis.close();
+//        String[] lines = new String(content, "Cp1251").split("\n"); // кодировку указать нужную
+//        int i = 1;
+//        for (String line : lines) {
+//            String[] words = line.split(" ");
+//            int j = 1;
+//            for (String word : words) {
+//                if (word.equalsIgnoreCase(searchWord)) {
+//                    System.out.println("Найдено в " + i + "-й строке, " + j + "-е слово");
+//                }
+//                j++;
+//            }
+//            i++;
+//        }
+//    }
+//}
+
