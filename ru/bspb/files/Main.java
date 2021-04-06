@@ -11,52 +11,29 @@ package ru.bspb.files;
 //В качестве бонуса - хорошо бы иметь возможность выделить записи с одинаковым сообщением и увидеть,
 // на каких строках в каких файлах данное сообщение было найдено
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.*;
 
+import java.util.Scanner;
+
 public class Main {
-
-
     public static void main(String[] args) throws IOException {
         File folder = new File("c:/log/");
         File[] listOfFiles = folder.listFiles();
         for (File tempFile : listOfFiles) {
             System.out.println(tempFile.getName());
-            try (FileReader fr = new FileReader(tempFile);
-                 BufferedReader br = new BufferedReader(fr);) {
-                String str;
-                while ((str = br.readLine()) != null) {
-                    System.out.println(str);
+            try (Scanner fr = new Scanner(tempFile)) {
+                while (fr.hasNext()) {
+                    LogEntry logEntry = new LogEntry();
+                    String nextLine = fr.nextLine();
+                    String[] logData = nextLine.split(" - ");
+                    logEntry.setTimestamp(logData[0]);
+                    logEntry.setLevel(logData[1]);
+                    logEntry.setMessage(logData[2]);
+                    if (logEntry.getLevel().contains("WARN")) {
+                        System.out.println("Timestamp: " + logEntry.getTimestamp() + " Level: " + logEntry.getLevel() + " Message: " + logEntry.getMessage());
+                    }
                 }
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
             }
         }
     }
 }
-
-
-//        String searchWord = "WARN"; // слово заменить на нужное
-//        FileInputStream fis = new FileInputStream(new File("c:/log/application.log")); // путь заменить на нужный
-//        byte[] content = new byte[fis.available()];
-//        fis.read(content);
-//        fis.close();
-//        String[] lines = new String(content, "Cp1251").split("\n"); // кодировку указать нужную
-//        int i = 1;
-//        for (String line : lines) {
-//            String[] words = line.split(" ");
-//            int j = 1;
-//            for (String word : words) {
-//                if (word.equalsIgnoreCase(searchWord)) {
-//                    System.out.println("Найдено в " + i + "-й строке, " + j + "-е слово");
-//                }
-//                j++;
-//            }
-//            i++;
-//        }
-//    }
-//}
-
